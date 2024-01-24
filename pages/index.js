@@ -1,7 +1,8 @@
 import Head from "next/head";
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import MessageBoardTable from "@/components/MessageBoardTable";
+// import MessageBoardTable from "@/components/MessageBoardTable";
+import App from "@/components/App";
 import {Container, Row, Col} from 'react-bootstrap';
 
 
@@ -21,7 +22,7 @@ export default function Home() {
         </Row>
         <Row>
             <Col xs={12} lg={8}>
-                <MessageBoardTable />
+                <App />
             </Col>
         </Row>
             <Row>
