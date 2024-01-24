@@ -1,5 +1,5 @@
+import Table from 'react-bootstrap/Table';
 const MessageBoardTable = () => {
-    const { Table } = ReactBootstrap;
     const messages = [
         { id: 0, name: 'Bill', msgText: 'Hi All!' },
         { id: 1, name: 'Ann', msgText: 'ICS 211 is fun!' },
