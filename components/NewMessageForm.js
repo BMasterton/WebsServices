@@ -21,8 +21,8 @@ const schema = yup.object().shape({
 const NewMessageForm = ({ addNewMessage }) => {
   
   const handleFormData = ( values, { resetForm, setSubmitting }) => {
-      /* addNewMessage(values)
-     * This is a function that needs to be passed to 
+     // addNewMessage(values)
+     /* This is a function that needs to be passed to 
      * this Component and implemented in the Parent.
      * values will contain the data this Component 
      * collected from the Form and will be passed to
@@ -36,6 +36,7 @@ const NewMessageForm = ({ addNewMessage }) => {
   }
   
   return (
+    
     <Card className="mb-3">
       <Card.Body>
         <Card.Title>Add a Message:</Card.Title>
@@ -91,7 +92,9 @@ const NewMessageForm = ({ addNewMessage }) => {
         </Formik>
       </Card.Body>
     </Card>
+    
   );
+  
 }
 
 export default NewMessageForm;

@@ -13,9 +13,9 @@ const MessageBoardTable = ({messages}) => {
         </tr>
         </thead>
         <tbody>
-        {messages.map(message => 
-                <MessageInfo key={message.id} {...message}/>
-            
+        {messages.map((message, index) => 
+                <MessageInfo key={message.id} {...message} msgNum={index +1}/>
+            //the msgNum takes that index that we grab from each iteration and makes a new prop from it 
             )}
         </tbody>
     </Table>
@@ -23,10 +23,10 @@ const MessageBoardTable = ({messages}) => {
 }
 
 
-const MessageInfo = ({id, name, msgText}) => {
+const MessageInfo = ({id, name, msgText, msgNum}) => {
     return (
         <tr> 
-            <td> {id + 1}</td>    
+            <td> {msgNum}</td>    
             <td> {name}</td>    
             <td> {msgText}</td>    
         </tr>
