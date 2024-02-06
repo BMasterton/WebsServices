@@ -4,9 +4,27 @@ import Footer from '@/components/Footer';
 // import MessageBoardTable from "@/components/MessageBoardTable";
 import App from "@/components/App";
 import {Container, Row, Col} from 'react-bootstrap';
+import axios from 'axios';
 
+export async function getStaticProps() {
 
-export default function Home() {
+  let jsonData;
+
+  try {
+    const { data } =
+      await axios.get('http://localhost:3004/v1/messages');
+    jsonData = data;
+    } catch (error) {
+      console.log('API Error: ' + error);
+    }
+    return {
+      props: {
+        jsonData
+      }
+    }
+  }
+
+export default function Home({jsonData}) {
   return (
     <>
       <Head>
@@ -22,7 +40,7 @@ export default function Home() {
         </Row>
         <Row>
             <Col xs={12} lg={8}>
-                <App />
+                <App jsonData={jsonData}/>
             </Col>
         </Row>
             <Row>
