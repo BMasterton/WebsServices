@@ -1,6 +1,7 @@
 import MessageBoardTable from "./MessageBoardTable";
 import NewMessageForm from "./NewMessageForm";
 import {useState} from 'react';
+import axios from "axios";
 
 const App = ({jsonData}) => {
     const messagesArray = [
@@ -16,14 +17,23 @@ const App = ({jsonData}) => {
     
 
 
-    const addNewMessage = values => {
+    const addNewMessage = async values => {
         console.log(values);
-        values.id = messages.length;
+        //values.id = messages.length;
+        try {
+            let data = await axios.post('http://10.21.75.134:3004/v1/messages', values);
+            console.log(data);
+            if (data){
+                setMessages([data.data, ...messages]);
+
+            }
+        } catch (err) {
+            console.log(err);
+        }
         // here we are making an array with the new values that we got from the form,
         // and then we are adding in all of the messages array. Since we can see that 
         // messages starts as the messagesArray and then messages becomes the array, so we 
         // will always keep the rest of the info. 
-        setMessages([values, ...messages]);
         // messages.unshift(values);
         //console.log(messages);
 
