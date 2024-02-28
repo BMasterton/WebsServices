@@ -21,7 +21,7 @@ const App = ({jsonData}) => {
         console.log(values);
         //values.id = messages.length;
         try {
-            let data = await axios.post('http://10.21.75.134:3004/v1/messages', values);
+            let data = await axios.post(`${process.env.NEXT_PUBLIC_HOST}/v1/messages`, values);
             console.log(data);
             if (data){
                 setMessages([data.data, ...messages]);

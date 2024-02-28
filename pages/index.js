@@ -12,7 +12,7 @@ export async function getStaticProps() {
 
   try {
     const { data } =
-      await axios.get('http://localhost:3004/v1/messages');
+      await axios.get(`${process.env.NEXT_PUBLIC_HOST}/v1/messages`);
     jsonData = data;
     } catch (error) {
       console.log('API Error: ' + error);
