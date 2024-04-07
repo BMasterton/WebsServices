@@ -1,5 +1,6 @@
 import MessageBoardTable from "./MessageBoardTable";
 import NewMessageForm from "./NewMessageForm";
+import LoginForm from "./LoginForm";
 import {useState} from 'react';
 import axios from "axios";
 
@@ -13,8 +14,24 @@ const App = ({jsonData}) => {
         { id: 5, name: 'Sarah', msgText: 'I Heart React' },
     ];
     const [messages, setMessages] = useState(jsonData);
+    const [authentication, setAuthentication] = useState(false);
 
-    
+    const logInUser = async values => {
+        console.log(values);
+        setAuthentication(true);
+
+        try {
+            let data = await axios.post(`${process.env.NEXT_PUBLIC_HOST}/v1/login`, values);
+            console.log(data);
+            if (data){
+                setMessages([data.data, ...messages]);
+
+            }
+        } catch (err) {
+            console.log(err);
+        }
+        // TODO: change the state of the boolean state hook to true (call the set function)
+        }
 
 
     const addNewMessage = async values => {
@@ -41,7 +58,7 @@ const App = ({jsonData}) => {
 
     return (
         <>
-            <NewMessageForm addNewMessage={addNewMessage}/>
+            {authentication ? <NewMessageForm addNewMessage={addNewMessage}/> : <LoginForm logInUser={logInUser}/>}
             <MessageBoardTable messages={messages}/>
             
         </>
