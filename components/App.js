@@ -18,13 +18,14 @@ const App = ({jsonData}) => {
 
     const logInUser = async values => {
         console.log(values);
-        setAuthentication(true);
-
         try {
             let data = await axios.post(`${process.env.NEXT_PUBLIC_HOST}/v1/login`, values);
-            console.log(data);
             if (data){
+                setAuthentication(true);
                 setMessages([data.data, ...messages]);
+                sessionStorage.setItem('token', data.data.token);
+                console.log("tokenInLogin", sessionStorage.getItem('token'))
+
 
             }
         } catch (err) {
@@ -35,10 +36,22 @@ const App = ({jsonData}) => {
 
 
     const addNewMessage = async values => {
-        console.log(values);
+        //console.log(values);\
+        console.log("tokeninMessage", sessionStorage.getItem('token'))
         //values.id = messages.length;
+        // configuration for axios, use bearer token auth
+        const axiosReqConfig = {
+            url: `${process.env.NEXT_PUBLIC_HOST}/v1/messages`,
+            method: 'post',
+            headers: { 'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+            },
+            data: values
+            }
+
         try {
-            let data = await axios.post(`${process.env.NEXT_PUBLIC_HOST}/v1/messages`, values);
+            const { data } = await axios(axiosReqConfig);
+            console.log("addNewMessageAxiosCall",data);
+            //let data = await axios.post(`${process.env.NEXT_PUBLIC_HOST}/v1/messages`, values);
             console.log(data);
             if (data){
                 setMessages([data.data, ...messages]);
@@ -58,7 +71,7 @@ const App = ({jsonData}) => {
 
     return (
         <>
-            {authentication ? <NewMessageForm addNewMessage={addNewMessage}/> : <LoginForm logInUser={logInUser}/>}
+            {authentication == true ? <NewMessageForm addNewMessage={addNewMessage}/> : <LoginForm logInUser={logInUser}/>}
             <MessageBoardTable messages={messages}/>
             
         </>
