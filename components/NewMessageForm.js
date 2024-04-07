@@ -3,13 +3,6 @@ import { Formik } from 'formik';
 import * as yup from "yup";
 
 const schema = yup.object().shape({
-  name: yup
-    .string()
-    .trim()
-    .min(2, 'Your name must be at least ${min} characters.')
-    .max(15, 'Your name cannot be more than ${max} characters.')
-    .matches(/^[A-Za-z0-9_]+$/, 'Invalid name. Use upper or lower case letters, 0 to 9, or underscore only.')
-    .required('Your name is required.'),
   msgText: yup
     .string()
     .trim()
@@ -21,8 +14,8 @@ const schema = yup.object().shape({
 const NewMessageForm = ({ addNewMessage }) => {
   
   const handleFormData = ( values, { resetForm, setSubmitting }) => {
-     // addNewMessage(values)
-     /* This is a function that needs to be passed to 
+      /* addNewMessage(values)
+     * This is a function that needs to be passed to 
      * this Component and implemented in the Parent.
      * values will contain the data this Component 
      * collected from the Form and will be passed to
@@ -36,14 +29,13 @@ const NewMessageForm = ({ addNewMessage }) => {
   }
   
   return (
-    
     <Card className="mb-3">
       <Card.Body>
         <Card.Title>Add a Message:</Card.Title>
         <Formik
           validationSchema={schema}
           onSubmit={handleFormData}
-          initialValues={{ name: '', msgText: '' }}
+          initialValues={{ msgText: '' }}
         >
           {({
             handleSubmit,
@@ -55,21 +47,7 @@ const NewMessageForm = ({ addNewMessage }) => {
           }) => (
             <Form noValidate onSubmit={handleSubmit}>
               <Row className="align-items-center">
-                <Form.Group as={Col} xs={4} className="mt-2" controlId="name">
-                  <Form.Label>Enter a Name:</Form.Label>
-                  <Form.Control
-                    placeholder="Your name"
-                    value={values.name}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    isValid={touched.name && !errors.name}
-                    isInvalid={touched.name && errors.name}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.name}
-                  </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group as={Col} className="mt-2" controlId="msgText">
+                <Form.Group as={Col} md={9} controlId="msgText">
                   <Form.Label>Enter Message:</Form.Label>
                   <Form.Control
                     placeholder="Your message"
@@ -80,21 +58,21 @@ const NewMessageForm = ({ addNewMessage }) => {
                     isInvalid={touched.msgText && errors.msgText}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {errors.msgText}
+                    {errors.messageText}
                   </Form.Control.Feedback>
                 </Form.Group>
+                <Col>
+                  <Button variant="primary" type="submit" className="mt-3">
+                    Submit
+                  </Button>
+                </Col>
               </Row>
-              <Button variant="primary" type="submit" className="mt-3">
-                Submit
-              </Button>
             </Form>
           )}
         </Formik>
       </Card.Body>
     </Card>
-    
   );
-  
 }
 
 export default NewMessageForm;
