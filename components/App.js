@@ -1,10 +1,14 @@
 import MessageBoardTable from "./MessageBoardTable";
 import NewMessageForm from "./NewMessageForm";
 import LoginForm from "./LoginForm";
-import {useState} from 'react';
+import {useState, useRef} from 'react';
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 const App = ({jsonData}) => {
+
+    const usernameRef = useRef(null);
+
     const messagesArray = [
         { id: 0, name: 'Bill', msgText: 'Hi All!' },
         { id: 1, name: 'Ann', msgText: 'ICS 211 is fun!' },
@@ -19,12 +23,14 @@ const App = ({jsonData}) => {
     const logInUser = async values => {
         console.log(values);
         try {
-            let data = await axios.post(`${process.env.NEXT_PUBLIC_HOST}/v1/login`, values);
+            const data = await axios.post(`${process.env.NEXT_PUBLIC_HOST}/v1/login`, values);
             if (data){
-                setAuthentication(true);
-                setMessages([data.data, ...messages]);
                 sessionStorage.setItem('token', data.data.token);
-                console.log("tokenInLogin", sessionStorage.getItem('token'))
+                const decodedToken = jwtDecode(data.data.token);
+                usernameRef.current = decodedToken.username;
+                setAuthentication(true);
+                
+               
 
 
             }
@@ -36,10 +42,10 @@ const App = ({jsonData}) => {
 
 
     const addNewMessage = async values => {
-        //console.log(values);\
         console.log("tokeninMessage", sessionStorage.getItem('token'))
-        //values.id = messages.length;
         // configuration for axios, use bearer token auth
+        values.name = usernameRef.current;
+
         const axiosReqConfig = {
             url: `${process.env.NEXT_PUBLIC_HOST}/v1/messages`,
             method: 'post',
@@ -50,13 +56,11 @@ const App = ({jsonData}) => {
 
         try {
             const { data } = await axios(axiosReqConfig);
-            console.log("addNewMessageAxiosCall",data);
-            //let data = await axios.post(`${process.env.NEXT_PUBLIC_HOST}/v1/messages`, values);
-            console.log(data);
-            if (data){
-                setMessages([data.data, ...messages]);
+            setMessages([data, ...messages]);
 
-            }
+            console.log("addNewMessageAxiosCall",data);
+            console.log(data);
+           
         } catch (err) {
             console.log(err);
         }
@@ -71,7 +75,7 @@ const App = ({jsonData}) => {
 
     return (
         <>
-            {authentication == true ? <NewMessageForm addNewMessage={addNewMessage}/> : <LoginForm logInUser={logInUser}/>}
+            {authentication == true ? (<NewMessageForm addNewMessage={addNewMessage}/>) : (<LoginForm logInUser={logInUser}/>)}
             <MessageBoardTable messages={messages}/>
             
         </>
